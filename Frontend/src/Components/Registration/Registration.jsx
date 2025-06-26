@@ -11,6 +11,8 @@ const Registration = () => {
       password: '',
       confirmPassword: ''
     });
+
+    const [emailExist,setEmailExist]=useState();
     const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -22,15 +24,28 @@ const Registration = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Submitted Property Data:', formData);
-    alert('Your user has been submitted for review.');
     // Here you can send the form data to backend/API
-    axios.post("http://localhost:3000/users",formData);
-    setFormData({
-      fullName: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-    });
+    axios.post("http://localhost:3000/users",formData)
+    .then(res=>{
+      const message=res.data;
+      setEmailExist(message);
+    //  alert(message);
+    alert(message);
+
+      if(message !== "This email already existed"){
+        setFormData({
+          fullName: '',
+          email: '',
+          password: '',
+          confirmPassword: ''
+        });
+      }
+      
+    })
+    .catch(err=>{
+      console.log(err.message);
+    })
+   ;
   };
   
 

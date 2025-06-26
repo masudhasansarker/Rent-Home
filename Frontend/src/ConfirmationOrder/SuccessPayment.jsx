@@ -8,7 +8,6 @@ const SuccessPayment = () => {
   useEffect(() => {
     // You can log the transaction ID or send it to backend for record keeping
     console.log("Payment successful. Transaction ID:", tran_id);
-
     // Optional: redirect after few seconds
     const timer = setTimeout(() => {
       navigate("/");
@@ -16,7 +15,6 @@ const SuccessPayment = () => {
 
     return () => clearTimeout(timer);
   }, [tran_id, navigate]);
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-green-50">
       <div className="bg-white p-8 rounded shadow-lg text-center">

@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import axios from 'axios';
+import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 
 const Login = () => {
+  const navigate=useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [loginData,setLoginData]=useState({
     email:"",
@@ -18,18 +21,25 @@ const Login = () => {
   }
 const handleSubmit=(e)=>{
   e.preventDefault();
-  console.log(loginData);
+  //console.log(loginData);
   //send the data to backend and check the validation
   axios.post("http://localhost:3000/login",loginData)
   .then((res)=>{
-    console.log(res.data)
-    if(res.data==="success"){
+    //alert(res.data.fullName);
+   localStorage.setItem("user", JSON.stringify({
+    name: res.data.fullName,
+    email: res.data.email,
+    _id: res.data._id
+  }));
+  //soft reload
+ 
+    if(!res.data){
       
+      alert("Login not Successful");
+    }else{
       alert("Login Successful");
     }
-    else{
-      alert("Login not Successful");
-    }
+     navigate("/");
     
   })
   .catch((data)=>{

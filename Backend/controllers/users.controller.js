@@ -4,6 +4,10 @@ const UserRegLogin = require("../model/users");
 exports.getUserReg=async (req, res) => {
   const { fullName, email, password, confirmPassword } = req.body;
   try {
+
+    const existingEmail= await UserRegLogin.findOne({email});
+    if(existingEmail) return res.send("This email already existed");
+    
     const resultReg = new UserRegLogin({ fullName, email, password, confirmPassword });
     const value = await resultReg.save();
     res.send(value ? "Registration Successful" : "Registration not successful");
@@ -16,7 +20,8 @@ exports.getLogin=async (req, res) => {
   const { email, password } = req.body;
   try {
     const data = await UserRegLogin.findOne({ email:email,password:password });
-    res.send(data ? "success" : "Not Successful");
+    //console.log(data._id);
+    res.send(data ? data : "Not Successful");
     //console.log(data);
   } catch (error) {
     res.send("User Data is not correct");
